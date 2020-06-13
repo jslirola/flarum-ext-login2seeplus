@@ -10,9 +10,9 @@ export default class Login2SeeSettingsModal extends SettingsModal
         super();
         this.linkOptions =
         {
-            'no_replace': app.translator.trans('jslirola-login2see.admin.link.no_replace'),
-            'replace_address': app.translator.trans('jslirola-login2see.admin.link.replace_address'),
-            'replace_all': app.translator.trans('jslirola-login2see.admin.link.replace_all'),
+            'no_replace': app.translator.trans('jslirola-login2seeplus.admin.link.no_replace'),
+            'replace_address': app.translator.trans('jslirola-login2seeplus.admin.link.replace_address'),
+            'replace_all': app.translator.trans('jslirola-login2seeplus.admin.link.replace_all'),
         };
     }
 
@@ -23,7 +23,7 @@ export default class Login2SeeSettingsModal extends SettingsModal
 
     title()
     {
-        return app.translator.trans('jslirola-login2see.admin.title');
+        return app.translator.trans('jslirola-login2seeplus.admin.title');
     }
 
     form()
