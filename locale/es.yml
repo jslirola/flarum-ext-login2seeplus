@@ -1,0 +1,22 @@
+jslirola-login2seeplus:
+  forum:
+    post: "{login} para ver el mensaje completo"
+    link: Inicia sesión para ver el enlace
+    image: Inicia sesión para ver la imagen
+  admin:
+    title: Login2SeePlus
+    post:
+      title: Ocultar contenido que exceda esta longitud
+      help: Introduce <em>-1</em> para mostrar todo.
+    link:
+      title: Enlaces
+      no_replace: No reemplazar
+      replace_address: Ocultar dirección
+      replace_all: Ocultar dirección y texto
+    image:
+      title: Imágenes
+      label: Ocultar
+    php:
+      title: Legacy Mode
+      help: "El servidor procesa el contenido. Requiere la extensión <code>mbstring</code> instalada."
+      label: Usar PHP
