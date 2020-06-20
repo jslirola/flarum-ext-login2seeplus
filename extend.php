@@ -25,7 +25,7 @@ return [
 
     (new Extend\Frontend('admin'))
         ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__ . '/less/login2seeplus.less'),
+        ->css(__DIR__ . '/less/login2seeplus-settings.less'),
 
     new Extend\Locales(__DIR__ . '/locale'),
 

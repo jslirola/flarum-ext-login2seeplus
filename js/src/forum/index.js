@@ -12,6 +12,7 @@ app.initializers.add('jslirola-login2seeplus', function()
     let jslirolaLogin2seeplusPostsLength;
     let jslirolaLogin2seeplusReplaceLinks;
     let jslirolaLogin2seeplusReplaceImages;
+    let jslirolaLogin2seeplusReplaceCode;
     const jslirolaLogin2seeplusImgMin = 150;
 
     // http://stackoverflow.com/questions/6003271/substring-text-with-html-tags-in-javascript/6003713#6003713
@@ -63,13 +64,22 @@ app.initializers.add('jslirola-login2seeplus', function()
         return text.length;
     }
 
+    function get_link(trans)
+    {
+        var newlink = document.createElement('a');
+        newlink.setAttribute('class', 'l2sp');
+        newlink.innerHTML = app.translator.trans(trans);
+        return newlink.outerHTML;
+    }
+
     extend(HeaderPrimary.prototype, 'init', function ()
     {
         jslirolaLogin2seeplusPostsLength = parseInt(app.forum.attribute('jslirola.login2seeplus.post') || 100);
         if (isNaN(jslirolaLogin2seeplusPostsLength))
             jslirolaLogin2seeplusPostsLength = -1;
-        jslirolaLogin2seeplusReplaceLinks = app.forum.attribute('jslirola.login2seeplus.link') || 'replace_all';
+        jslirolaLogin2seeplusReplaceLinks = JSON.parse(app.forum.attribute('jslirola.login2seeplus.link') || 1);
         jslirolaLogin2seeplusReplaceImages = JSON.parse(app.forum.attribute('jslirola.login2seeplus.image') || 0);
+        jslirolaLogin2seeplusReplaceCode = JSON.parse(app.forum.attribute('jslirola.login2seeplus.code') || 0);
         jslirolaLogin2seeplusUsePHP = JSON.parse(app.forum.attribute('jslirola.login2seeplus.php') || 0);
     });
 
@@ -97,10 +107,10 @@ app.initializers.add('jslirola-login2seeplus', function()
         }
 
         // replace links
-        if (jslirolaLogin2seeplusReplaceLinks != 'no_replace')
-            newContent = newContent.replace(/<a href=".*?"/g, '<a');
-        if (jslirolaLogin2seeplusReplaceLinks == 'replace_all')
-            newContent = newContent.replace(/(<a[^>]*>)[^<]*<\/a>/g, '$1' + app.translator.trans('jslirola-login2seeplus.forum.link') + '</a>');
+        if (jslirolaLogin2seeplusReplaceLinks == 1)
+            newContent = newContent.replace(/(<a((?!PostMention).)*?>)[^<]*<\/a>/g, get_link('jslirola-login2seeplus.forum.link'));
+        if (jslirolaLogin2seeplusReplaceLinks == 2)
+            newContent = newContent.replace(/<a href=".*?"/g, '<a class="l2sp"');
 
         // replace images
         if (jslirolaLogin2seeplusReplaceImages)
@@ -126,8 +136,15 @@ app.initializers.add('jslirola-login2seeplus', function()
                 loader.counter = imgCounter;
                 loader.src = src;
 
-                return '<div class="jslirolaLogin2seeplusImgPlaceholder wlip' + (imgCounter++) + '">' + app.translator.trans('jslirola-login2seeplus.forum.image') + '</div>';
+                return '<div class="jslirolaLogin2seeplusImgPlaceholder wlip' + (imgCounter++) + '">' + get_link('jslirola-login2seeplus.forum.image') + '</div>';
             });
+        }
+
+        // replace code
+        if (jslirolaLogin2seeplusReplaceCode)
+        {
+            newContent = newContent.replace(/<pre><code.*?>[^]*<\/pre>/g, get_link('jslirola-login2seeplus.forum.code'));
+            newContent = newContent.replace(/<code.*?>[^>]*<\/code>/g, get_link('jslirola-login2seeplus.forum.code'));
         }
 
         if (subbedContent)
@@ -138,13 +155,14 @@ app.initializers.add('jslirola-login2seeplus', function()
             }).join('') + '</div>';
 
         list[1].children[0] = m.trust(newContent);
+
     });
 
     extend(CommentPost.prototype, 'config', function()
     {
-        if (jslirolaLogin2seeplusReplaceLinks != 'no_replace')
-            $('.Post-body a').off('click').on('click', () => app.modal.show(new LogInModal()));
+        $('.Post-body a.l2sp').off('click').on('click', () => app.modal.show(new LogInModal()));
         $('.jslirolaLogin2seeplusLogin').off('click').on('click', () => app.modal.show(new LogInModal()));
         $('.jslirolaLogin2seeplusRegister').off('click').on('click', () => app.modal.show(new SignUpModal()));
     });
+
 });

@@ -17,6 +17,7 @@ class LoadSettingsFromDatabase
         'link',
         'image',
         'php',
+        'code'
     ];
 
     public function __construct(SettingsRepositoryInterface $settings, TranslatorInterface $translator)
@@ -47,6 +48,11 @@ class LoadSettingsFromDatabase
         return mb_substr($string, 0, $length = min(mb_strlen($string), $length + $i)) . (count($tags = array_reverse($tags)) ? '</' . implode('></', $tags) . '>' : '');
     }
 
+    private function get_link($trans)
+    {
+        return '<a class="l2sp">' . $this->translator->trans($trans) . '</a>';
+    }
+
     public function handle(Serializing $event)
     {
         if ($event->isSerializer(ForumSerializer::class))
@@ -67,25 +73,31 @@ class LoadSettingsFromDatabase
                 return;
 
             $s_post = (int)$this->settings->get('jslirola.login2seeplus.post', 100);
-            $s_link = $this->settings->get('jslirola.login2seeplus.link', 'replace_all');
+            $s_link = $this->settings->get('jslirola.login2seeplus.link', false);
             $s_image = $this->settings->get('jslirola.login2seeplus.image', false);
+            $s_code = $this->settings->get('jslirola.login2seeplus.code', false);
 
-            $originalHTML = $event->attributes['contentHtml'];
-            $newHTML = $originalHTML;
+            $newHTML = $event->attributes['contentHtml'];
 
             // truncate
-            if ($s_post != -1)
+            if ($s_post != -1 && function_exists('mb_substr') && function_exists('mb_strlen'))
                 $newHTML =  $this->truncate_html($newHTML, $s_post);
 
             // links
-            if ($s_link != 'no_replace')
-                $newHTML = preg_replace('/<a href=".*?"/is', '<a', $newHTML);
-            if ($s_link == 'replace_all')
-                $newHTML = preg_replace('/(<a[^>]*>)[^<]*<\/a>/is', '$1' . $this->translator->trans('jslirola-login2seeplus.forum.link') . '</a>', $newHTML);
+            if ($s_link == 1)
+                $newHTML = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+            elseif ($s_link == 2) // hide address
+                $newHTML = preg_replace('/<a href=".*?"/is', '<a class="l2sp"', $newHTML);
 
             // images
             if ($s_image)
-                $newHTML = preg_replace('/<img((.(?!class=))*)\/?>/is', '<div class="jslirolaLogin2seeplusImgPlaceholder">' . $this->translator->trans('jslirola-login2seeplus.forum.image') . '</div>', $newHTML);
+                $newHTML = preg_replace('/<img((.(?!class=))*)\/?>/is', '<div class="jslirolaLogin2seeplusImgPlaceholder">' . $this->get_link('jslirola-login2seeplus.forum.image') . '</div>', $newHTML);
+
+            // code
+            if ($s_code) {
+                $newHTML = preg_replace('/<pre><code(.*?)>[^>]*<\/pre>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
+                $newHTML = preg_replace('/<code(.*?)>[^>]*<\/code>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
+            }
             
             // show alert
             if ($s_post != -1)
