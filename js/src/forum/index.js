@@ -93,7 +93,7 @@ app.initializers.add('jslirola-login2seeplus', function()
 
         let oldContent = list[1].children[0].toString();
         let newContent = oldContent;
-        let subbedContent = false;   
+        let subbedContent = false;
 
         // hide content
         if (jslirolaLogin2seeplusPostsLength != -1 && html_count(newContent) > jslirolaLogin2seeplusPostsLength)
@@ -106,9 +106,11 @@ app.initializers.add('jslirola-login2seeplus', function()
             subbedContent = true;
         }
 
-        // replace links
-        if (jslirolaLogin2seeplusReplaceLinks == 1)
-            newContent = newContent.replace(/(<a((?!PostMention).)*?>)[^<]*<\/a>/g, get_link('jslirola-login2seeplus.forum.link'));
+        // replace links and iframe
+        if (jslirolaLogin2seeplusReplaceLinks == 1) {
+          newContent = newContent.replace(/(<a((?!PostMention).)*?>)[^<]*<\/a>/g, get_link('jslirola-login2seeplus.forum.link'));
+          newContent = newContent.replace(/<iframe(.*?)><\/iframe>/g, get_link('jslirola-login2seeplus.forum.link'));
+        }
         if (jslirolaLogin2seeplusReplaceLinks == 2)
             newContent = newContent.replace(/<a href=".*?"/g, '<a class="l2sp"');
 

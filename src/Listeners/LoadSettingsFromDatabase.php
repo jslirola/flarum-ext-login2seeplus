@@ -84,9 +84,12 @@ class LoadSettingsFromDatabase
                 $newHTML =  $this->truncate_html($newHTML, $s_post);
 
             // links
-            if ($s_link == 1)
+            if ($s_link == 1) {
                 $newHTML = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-            elseif ($s_link == 2) // hide address
+                //$newHTML = preg_replace('/<GOOGLEDRIVE(.*?)>[^>]*<\/GOOGLEDRIVE>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+                //$newHTML = preg_replace('/<GOOGLESHEETS(.*?)>[^>]*<\/GOOGLESHEETS>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+                $newHTML = preg_replace('/<iframe(.*?)><\/iframe>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+            } elseif ($s_link == 2) // hide address
                 $newHTML = preg_replace('/<a href=".*?"/is', '<a class="l2sp"', $newHTML);
 
             // images
@@ -98,7 +101,7 @@ class LoadSettingsFromDatabase
                 $newHTML = preg_replace('/<pre><code(.*?)>[^>]*<\/pre>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
                 $newHTML = preg_replace('/<code(.*?)>[^>]*<\/code>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
             }
-            
+
             // show alert
             if ($s_post != -1)
                 $newHTML .= '<div class="jslirolaLogin2seeplusAlert">' . $this->translator->trans('jslirola-login2seeplus.forum.post', array(
