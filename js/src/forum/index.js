@@ -109,7 +109,8 @@ app.initializers.add('jslirola-login2seeplus', function()
         // replace links and iframe
         if (jslirolaLogin2seeplusReplaceLinks == 1) {
           newContent = newContent.replace(/(<a((?!PostMention).)*?>)[^<]*<\/a>/g, get_link('jslirola-login2seeplus.forum.link'));
-          newContent = newContent.replace(/<iframe(.*?)><\/iframe>/g, get_link('jslirola-login2seeplus.forum.link'));
+          newContent = newContent.replace(/<span data-s9e-mediaembed=(.*?)><span (.*?)><iframe(.*?)><\/iframe><\/span><\/span>/g, get_link('jslirola-login2seeplus.forum.link'));
+          newContent = newContent.replace(/<iframe data-s9e-mediaembed=(.*?)><\/iframe>/g, get_link('jslirola-login2seeplus.forum.link'));
         }
         if (jslirolaLogin2seeplusReplaceLinks == 2)
             newContent = newContent.replace(/<a href=".*?"/g, '<a class="l2sp"');

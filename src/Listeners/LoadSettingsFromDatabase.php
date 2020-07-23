@@ -86,9 +86,10 @@ class LoadSettingsFromDatabase
             // links
             if ($s_link == 1) {
                 $newHTML = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-                //$newHTML = preg_replace('/<GOOGLEDRIVE(.*?)>[^>]*<\/GOOGLEDRIVE>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-                //$newHTML = preg_replace('/<GOOGLESHEETS(.*?)>[^>]*<\/GOOGLESHEETS>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-                $newHTML = preg_replace('/<iframe(.*?)><\/iframe>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+//                $newHTML = preg_replace('/<GOOGLEDRIVE(.*?)>[^>]*<\/GOOGLEDRIVE>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+//                $newHTML = preg_replace('/<GOOGLESHEETS(.*?)>[^>]*<\/GOOGLESHEETS>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+                $newHTML = preg_replace('/<span data-s9e-mediaembed=(.*?)><span (.*?)><iframe(.*?)><\/iframe><\/span><\/span>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+                $newHTML = preg_replace('/<iframe data-s9e-mediaembed=(.*?)><\/iframe>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
             } elseif ($s_link == 2) // hide address
                 $newHTML = preg_replace('/<a href=".*?"/is', '<a class="l2sp"', $newHTML);
 
