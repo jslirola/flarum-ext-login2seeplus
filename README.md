@@ -6,6 +6,15 @@ Original Extension by [WiseClock](https://github.com/WiseClock/flarum-ext-login2
 
 A [Flarum](http://flarum.org) extension that hides links and images in a post for visitors. You can also hide post contents exceeding a set length.
 
+#### Admin settings
+![Admin settings](https://i.imgur.com/iCksBVw.png)
+
+#### Reading a post as member
+![Member view](https://i.ibb.co/wdxmWMB/miembro.jpg)
+
+#### Reading a post as guest
+![Guest view](https://i.ibb.co/r7bVZQX/visitante1.jpg)
+
 ### Installation
 
 ```sh
