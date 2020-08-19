@@ -3,6 +3,7 @@
 namespace JSLirola\Login2SeePlus\Listeners;
 
 use Flarum\Api\Serializer\ForumSerializer;
+use Flarum\Api\Serializer\BasicPostSerializer;
 use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Event\Serializing;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -80,8 +81,10 @@ class LoadSettingsFromDatabase
             $newHTML = $event->attributes['contentHtml'];
 
             // truncate
-            if ($s_post != -1 && function_exists('mb_substr') && function_exists('mb_strlen'))
+            if ($s_post != -1 && function_exists('mb_substr') && function_exists('mb_strlen')) {
                 $newHTML =  $this->truncate_html($newHTML, $s_post);
+                $newHTML = preg_replace('/(<p>)([^<]*)<\/p>$/is', '$1$2...$3', $newHTML);
+            }
 
             // links
             if ($s_link == 1) {
@@ -111,6 +114,19 @@ class LoadSettingsFromDatabase
                 )) . '</div>';
 
             $event->attributes['contentHtml'] = $newHTML;
+
+        }
+        else if ($event->isSerializer(BasicPostSerializer::class) && !is_null($event->attributes["contentHtml"]))
+        {
+            if (!$event->actor->isGuest())
+                return;
+
+            $s_summary_links = $this->settings->get('jslirola.login2seeplus.link', false);
+
+            if ($s_summary_links == 1)
+                $event->attributes['contentHtml'] = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is',
+                    '[' . $this->get_link('jslirola-login2seeplus.forum.link') . ']', $event->attributes['contentHtml']);
+
         }
     }
 }
