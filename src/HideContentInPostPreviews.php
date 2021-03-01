@@ -28,6 +28,8 @@ class HideContentInPostPreviews extends FormatContent
             $newHtml = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is',
                 '[' . $this->get_link('jslirola-login2seeplus.forum.link') . ']', $newHtml);
 
+        $attributes['contentHtml'] = $newHTML;
+
         return $attributes;
     }
 

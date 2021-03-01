@@ -17,7 +17,7 @@ class HideContentInPosts extends FormatContent
 {
     public function __invoke($serializer, $model, $attributes)
     {
-        $newHTML = $attributes["contentHtml"];
+        $newHTML = $attributes['contentHtml'];
 
         if (!$serializer->getActor()->isGuest())
             return $attributes;
