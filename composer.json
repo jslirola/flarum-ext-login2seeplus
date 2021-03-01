@@ -22,6 +22,7 @@
             "title": "Login2SeePlus",
             "icon": {
                 "name": "fas fa-eye",
+                "category": "discussion",
                 "backgroundColor": "#ff1a00",
                 "color": "#fff"
             }
