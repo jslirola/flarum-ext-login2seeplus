@@ -15,12 +15,12 @@ namespace JSLirola\Login2SeePlus;
 
 class HideContentInPostPreviews extends FormatContent
 {
-    public function getContent($serializer, $attributes)
+    public function __invoke($serializer, $model, $attributes)
     {
         $newHTML = $attributes["contentHtml"];
 
         if (!$serializer->getActor()->isGuest())
-            return $newHTML;
+            return $attributes;
 
         $s_summary_links = $this->settings->get('jslirola.login2seeplus.link', false);
 
@@ -28,7 +28,7 @@ class HideContentInPostPreviews extends FormatContent
             $newHtml = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is',
                 '[' . $this->get_link('jslirola-login2seeplus.forum.link') . ']', $newHtml);
 
-        return $newHTML;
+        return $attributes;
     }
 
 }

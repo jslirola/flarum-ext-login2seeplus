@@ -33,34 +33,16 @@ return [
     (new Extend\Locales(__DIR__ . '/locale')),
 
     (new Extend\Settings())
-        ->serializeToForum('jslirola.login2seeplus.post', 'jslirola.login2seeplus.post', function ($val) {
-            return $val;
-        })
-        ->serializeToForum('jslirola.login2seeplus.link', 'jslirola.login2seeplus.link', function ($val) {
-            return $val;
-        })
-        ->serializeToForum('jslirola.login2seeplus.image', 'jslirola.login2seeplus.image', function ($val) {
-            return $val;
-        })
-        ->serializeToForum('jslirola.login2seeplus.php', 'jslirola.login2seeplus.php', function ($val) {
-            return $val;
-        })
-        ->serializeToForum('jslirola.login2seeplus.code', 'jslirola.login2seeplus.code', function ($val) {
-            return $val;
-        }),
+        ->serializeToForum('jslirola.login2seeplus.post', 'jslirola.login2seeplus.post')
+        ->serializeToForum('jslirola.login2seeplus.link', 'jslirola.login2seeplus.link')
+        ->serializeToForum('jslirola.login2seeplus.image', 'jslirola.login2seeplus.image')
+        ->serializeToForum('jslirola.login2seeplus.php', 'jslirola.login2seeplus.php')
+        ->serializeToForum('jslirola.login2seeplus.code', 'jslirola.login2seeplus.code'),
 
     (new Extend\ApiSerializer(PostSerializer::class))
-        ->mutate(function ($serializer, $model, $attributes) {
-            $m = app(HideContentInPosts::class);
-            $attributes['contentHtml'] = $m->getContent($serializer, $attributes);
-            return $attributes;
-        }),
+        ->mutate(HideContentInPosts::class),
 
     (new Extend\ApiSerializer(BasicPostSerializer::class))
-        ->mutate(function ($serializer, $model, $attributes) {
-            $m = app(HideContentInPostPreviews::class);
-            $attributes['contentHtml'] = $m->getContent($serializer, $attributes);
-            return $attributes;
-        }),
+        ->mutate(HideContentInPostPreviews::class),
 
 ];

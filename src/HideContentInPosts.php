@@ -15,16 +15,16 @@ namespace JSLirola\Login2SeePlus;
 
 class HideContentInPosts extends FormatContent
 {
-    public function getContent($serializer, $attributes)
+    public function __invoke($serializer, $model, $attributes)
     {
         $newHTML = $attributes["contentHtml"];
 
         if (!$serializer->getActor()->isGuest())
-            return $newHTML;
+            return $attributes;
 
         $s_php = $this->settings->get('jslirola.login2seeplus.php', false);
         if (!$s_php)
-            return $newHTML;
+            return $attributes;
 
         $s_post = (int)$this->settings->get('jslirola.login2seeplus.post', 100);
         $s_link = $this->settings->get('jslirola.login2seeplus.link', false);
@@ -64,7 +64,9 @@ class HideContentInPosts extends FormatContent
                     '{register}' => '<a class="jslirolaLogin2seeplusRegister">' . $this->translator->trans('core.forum.header.sign_up_link') . '</a>'
                 )) . '</div>';
 
-        return $newHTML;
+        $attributes['contentHtml'] = $newHTML;
+
+        return $attributes;
     }
 
 }
