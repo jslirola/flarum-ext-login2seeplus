@@ -1,5 +1,5 @@
-import { extend } from 'flarum/extend';
-import app from 'flarum/app';
+import { extend } from 'flarum/common/extend';
+import app from 'flarum/common/app';
 
 import Login2SeePlusSettingsModal from './components/Login2SeePlusSettingsModal';
 

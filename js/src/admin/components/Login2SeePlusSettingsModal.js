@@ -1,7 +1,7 @@
-import SettingsModal from 'flarum/components/SettingsModal';
-import Switch from "flarum/components/Switch";
-import Select from 'flarum/components/Select';
-import app from 'flarum/app';
+import SettingsModal from 'flarum/common/components/SettingsModal';
+import Switch from "flarum/common/components/Switch";
+import Select from 'flarum/common/components/Select';
+import app from 'flarum/common/app';
 
 export default class Login2SeePlusSettingsModal extends SettingsModal
 {

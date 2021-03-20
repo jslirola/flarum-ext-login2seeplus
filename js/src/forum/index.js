@@ -1,10 +1,10 @@
-import { extend, override } from 'flarum/extend';
+import { extend, override } from 'flarum/common/extend';
 
-import app from 'flarum/app';
-import CommentPost from 'flarum/components/CommentPost';
-import HeaderPrimary from 'flarum/components/HeaderPrimary';
-import LogInModal from 'flarum/components/LogInModal';
-import SignUpModal from 'flarum/components/SignUpModal';
+import app from 'flarum/common/app';
+import CommentPost from 'flarum/common/components/CommentPost';
+import HeaderPrimary from 'flarum/common/components/HeaderPrimary';
+import LogInModal from 'flarum/common/components/LogInModal';
+import SignUpModal from 'flarum/common/components/SignUpModal';
 
 app.initializers.add('jslirola-login2seeplus', function()
 {
