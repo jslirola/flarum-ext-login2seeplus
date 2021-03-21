@@ -23,12 +23,8 @@ class HideContentInPosts extends FormatContent
             return $attributes;
 
         $s_php = $this->settings->get('jslirola.login2seeplus.php', false);
-        if (!$s_php)
-            return $attributes;
-
         $s_post = (int)$this->settings->get('jslirola.login2seeplus.post', 100);
         $s_link = $this->settings->get('jslirola.login2seeplus.link', false);
-        $s_image = $this->settings->get('jslirola.login2seeplus.image', false);
         $s_code = $this->settings->get('jslirola.login2seeplus.code', false);
 
         // truncate
@@ -46,10 +42,6 @@ class HideContentInPosts extends FormatContent
             $newHTML = preg_replace('/<iframe data-s9e-mediaembed=(.*?)><\/iframe>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
         } elseif ($s_link == 2) // hide address
             $newHTML = preg_replace('/<a href=".*?"/is', '<a class="l2sp"', $newHTML);
-
-        // images
-        if ($s_image)
-            $newHTML = preg_replace('/<img((.(?!class=))*)\/?>/is', '<div class="jslirolaLogin2seeplusImgPlaceholder">' . $this->get_link('jslirola-login2seeplus.forum.image') . '</div>', $newHTML);
 
         // code
         if ($s_code) {
