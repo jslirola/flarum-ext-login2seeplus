@@ -14,9 +14,7 @@
         "source": "https://github.com/jslirola/flarum-ext-login2seeplus",
         "forum": "https://discuss.flarum.org/d/24193-login-2-see-plus"
     },
-    "require": {
-        "flarum/core": "^0.1.0-beta.16"
-    },
+    "require": {},
     "extra": {
         "flarum-extension": {
             "title": "Login2SeePlus",
