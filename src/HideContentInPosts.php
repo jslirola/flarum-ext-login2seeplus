@@ -50,13 +50,21 @@ class HideContentInPosts extends FormatContent
                 $newHTML = preg_replace('/<pre><code(.*?)>[^>]*<\/pre>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
                 $newHTML = preg_replace('/<code(.*?)>[^>]*<\/code>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
             }
-
             // show alert
-            if ($s_post != -1)
-                $newHTML .= '<div class="jslirolaLogin2seeplusAlert">' . $this->translator->trans('jslirola-login2seeplus.forum.post', array(
-                        '{login}' => '<a class="jslirolaLogin2seeplusLogin">' . $this->translator->trans('core.forum.header.log_in_link') . '</a>',
-                        '{register}' => '<a class="jslirolaLogin2seeplusRegister">' . $this->translator->trans('core.forum.header.sign_up_link') . '</a>'
-                    )) . '</div>';
+            if ($s_post != -1) {
+                $args = [
+                    '{login}' => '<a class="jslirolaLogin2seeplusLogin">' . $this->translator->trans('core.forum.header.log_in_link') . '</a>'
+                ];
+
+                if ($this->settings->get('allow_sign_up') === '1') {
+                    $args['register'] = '<a class="jslirolaLogin2seeplusRegister">' . $this->translator->trans('core.forum.header.sign_up_link') . '</a>';
+                }
+
+                $key = $this->settings->get('allow_sign_up') === '1'
+                    ? 'jslirola-login2seeplus.forum.post'
+                    : 'jslirola-login2seeplus.forum.post_login';
+                $newHTML .= '<div class="jslirolaLogin2seeplusAlert">' . $this->translator->trans($key,$args) . '</div>';
+            }
 
             $attributes['contentHtml'] = $newHTML;
 
