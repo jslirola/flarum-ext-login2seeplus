@@ -21,7 +21,7 @@ class HideContentInPosts extends FormatContent
 
             $newHTML = $attributes['contentHtml'];
 
-            if (!$serializer->getActor()->isGuest())
+            if (!$serializer->getActor()->isGuest() && $serializer->getActor()->is_email_confirmed === 1)
                 return $attributes;
 
             $s_php = $this->settings->get('jslirola.login2seeplus.php', false);

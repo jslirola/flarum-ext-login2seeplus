@@ -21,7 +21,7 @@ class HideContentInPostPreviews extends FormatContent
 
             $newHTML = $attributes["contentHtml"];
 
-            if (!$serializer->getActor()->isGuest())
+            if (!$serializer->getActor()->isGuest() && $serializer->getActor()->is_email_confirmed === 1)
                 return $attributes;
 
             $s_summary_links = $this->settings->get('jslirola.login2seeplus.link', false);
