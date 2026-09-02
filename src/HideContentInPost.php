@@ -43,13 +43,22 @@ class HideContentInPost extends FormatContent
                 $newHTML = preg_replace('/(<p>)([^<]*)<\/p>$/is', '$1$2...$3', $newHTML);
             }
 
-            // links
+            // a link whose entire content is an image (e.g. an upload/lightbox link) is
+            // an image first and foremost, so it gets the image message, not the link
+            // message, and takes priority over both link-hiding modes below
+            if ($s_image) {
+                $newHTML = preg_replace('/<a\b[^>]*>\s*<img\b[^>]*\/?>\s*<\/a>/is', '<div class="jslirolaLogin2seeplusImgPlaceholder">' . $this->get_link('jslirola-login2seeplus.forum.image') . '</div>', $newHTML);
+            }
+
+            // links (excludes PostMentions and links we've already converted ourselves,
+            // e.g. the image placeholder above, so a later pass can't re-process them)
             if ($s_link == 1) {
-                $newHTML = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
+                $newHTML = preg_replace('/(<a((?!PostMention)(?!l2sp).)*?>)[^<]*<\/a>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
                 $newHTML = preg_replace('/<span data-s9e-mediaembed=(.*?)><span (.*?)><iframe(.*?)><\/iframe><\/span><\/span>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
                 $newHTML = preg_replace('/<iframe data-s9e-mediaembed=(.*?)><\/iframe>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-            } elseif ($s_link == 2) // hide address
-                $newHTML = preg_replace('/<a href=".*?"/is', '<a class="l2sp"', $newHTML);
+            } elseif ($s_link == 2) { // hide destination, keep the link text
+                $newHTML = preg_replace('/<a((?!PostMention)(?!l2sp).)*?href="[^"]*"((?!PostMention)(?!l2sp).)*?>/is', '<a class="l2sp">', $newHTML);
+            }
 
             // images
             if ($s_image) {
