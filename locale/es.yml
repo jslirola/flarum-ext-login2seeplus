@@ -8,6 +8,9 @@ jslirola-login2seeplus:
     title: Login2SeePlus
     hide: Ocultar
     link: Enlaces
+    link_off: No ocultar
+    link_hide: Ocultar el enlace completo
+    link_mask: Ocultar solo el destino (mantener el texto)
     image: Imágenes
     code: Código
     post:
