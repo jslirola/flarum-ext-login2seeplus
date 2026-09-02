@@ -13,13 +13,8 @@
 
 namespace JSLirola\Login2SeePlus;
 
-use Flarum\Api\Serializer\BasicPostSerializer;
-use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Api\Serializer\PostSerializer;
+use Flarum\Api\Resource\PostResource;
 use Flarum\Extend;
-use Illuminate\Contracts\Events\Dispatcher;
-use JSLirola\Login2SeePlus\HideContentInPosts;
-use JSLirola\Login2SeePlus\HideContentInPostPreviews;
 
 return [
     (new Extend\Frontend('forum'))
@@ -39,10 +34,6 @@ return [
         ->serializeToForum('jslirola.login2seeplus.php', 'jslirola.login2seeplus.php')
         ->serializeToForum('jslirola.login2seeplus.code', 'jslirola.login2seeplus.code'),
 
-    (new Extend\ApiSerializer(PostSerializer::class))
-        ->attributes(HideContentInPosts::class),
-
-    (new Extend\ApiSerializer(BasicPostSerializer::class))
-        ->attributes(HideContentInPostPreviews::class),
-
+    (new Extend\ApiResource(PostResource::class))
+        ->field('contentHtml', HideContentInPost::class),
 ];
