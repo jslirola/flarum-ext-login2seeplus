@@ -13,20 +13,28 @@
 
 namespace JSLirola\Login2SeePlus;
 
-class HideContentInPosts extends FormatContent
+use Flarum\Api\Context;
+use Flarum\Api\Schema;
+
+class HideContentInPost extends FormatContent
 {
-    public function __invoke($serializer, $model, $attributes)
+    public function __invoke(Schema\Str $field): Schema\Str
     {
-        if (isset($attributes["contentHtml"])) {
+        return $field->serialize(function ($newHTML, Context $context) {
+            if ($newHTML === null) {
+                return $newHTML;
+            }
 
-            $newHTML = $attributes['contentHtml'];
+            $actor = $context->getActor();
 
-            if (!$serializer->getActor()->isGuest() && $serializer->getActor()->is_email_confirmed === 1)
-                return $attributes;
+            if (!$actor->isGuest() && $actor->is_email_confirmed) {
+                return $newHTML;
+            }
 
             $s_php = $this->settings->get('jslirola.login2seeplus.php', false);
-            $s_post = (int)$this->settings->get('jslirola.login2seeplus.post', 100);
+            $s_post = (int) $this->settings->get('jslirola.login2seeplus.post', 100);
             $s_link = $this->settings->get('jslirola.login2seeplus.link', false);
+            $s_image = $this->settings->get('jslirola.login2seeplus.image', false);
             $s_code = $this->settings->get('jslirola.login2seeplus.code', false);
 
             // truncate
@@ -38,18 +46,22 @@ class HideContentInPosts extends FormatContent
             // links
             if ($s_link == 1) {
                 $newHTML = preg_replace('/(<a((?!PostMention).)*?>)[^<]*<\/a>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-                // $newHTML = preg_replace('/<GOOGLEDRIVE(.*?)>[^>]*<\/GOOGLEDRIVE>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
-                // $newHTML = preg_replace('/<GOOGLESHEETS(.*?)>[^>]*<\/GOOGLESHEETS>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
                 $newHTML = preg_replace('/<span data-s9e-mediaembed=(.*?)><span (.*?)><iframe(.*?)><\/iframe><\/span><\/span>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
                 $newHTML = preg_replace('/<iframe data-s9e-mediaembed=(.*?)><\/iframe>/is', $this->get_link('jslirola-login2seeplus.forum.link'), $newHTML);
             } elseif ($s_link == 2) // hide address
                 $newHTML = preg_replace('/<a href=".*?"/is', '<a class="l2sp"', $newHTML);
+
+            // images
+            if ($s_image) {
+                $newHTML = preg_replace('/<img\b[^>]*\/?>/is', '<div class="jslirolaLogin2seeplusImgPlaceholder">' . $this->get_link('jslirola-login2seeplus.forum.image') . '</div>', $newHTML);
+            }
 
             // code
             if ($s_code) {
                 $newHTML = preg_replace('/<pre><code(.*?)>[^>]*<\/pre>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
                 $newHTML = preg_replace('/<code(.*?)>[^>]*<\/code>/is', $this->get_link('jslirola-login2seeplus.forum.code'), $newHTML);
             }
+
             // show alert
             if ($s_post != -1) {
                 $args = [
@@ -63,14 +75,10 @@ class HideContentInPosts extends FormatContent
                 $key = $this->settings->get('allow_sign_up') === '1'
                     ? 'jslirola-login2seeplus.forum.post'
                     : 'jslirola-login2seeplus.forum.post_login';
-                $newHTML .= '<div class="jslirolaLogin2seeplusAlert">' . $this->translator->trans($key,$args) . '</div>';
+                $newHTML .= '<div class="jslirolaLogin2seeplusAlert">' . $this->translator->trans($key, $args) . '</div>';
             }
 
-            $attributes['contentHtml'] = $newHTML;
-
-        }
-
-        return $attributes;
+            return $newHTML;
+        });
     }
-
 }

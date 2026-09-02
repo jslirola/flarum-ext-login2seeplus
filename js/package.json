@@ -1,16 +1,13 @@
 {
   "private": true,
   "name": "@jslirola/flarum-ext-login2seeplus",
-  "dependencies": {
-    "flarum-webpack-config": "^1.0.0"
-  },
   "scripts": {
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production"
   },
   "devDependencies": {
-    "flarum": "^1.0.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "flarum-webpack-config": "^3.0.0",
+    "webpack": "^5.104.1",
+    "webpack-cli": "^4.9.1"
   }
 }

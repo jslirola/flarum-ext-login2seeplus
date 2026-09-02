@@ -13,8 +13,8 @@
 
 namespace JSLirola\Login2SeePlus;
 
+use Flarum\Locale\TranslatorInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FormatContent
 {
